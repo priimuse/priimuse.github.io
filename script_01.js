@@ -27,7 +27,7 @@ function loadDoc() {
       console.log(xhttp.responseText.ranNum());
     }
   };
-  xhttp.open("GET", "script_02.js", true);
+  xhttp.open("GET", "http://www.codecademy.com/", true);
   xhttp.send();
 }
 
