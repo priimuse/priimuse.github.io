@@ -6,6 +6,9 @@
     <link rel = "stylesheet" type = "text/css" href = "/css/main.css">
 
     <script>
+      //async post calls out to heroku hosted webapp
+      //https://github.com/priimuse/personal_be
+
       function SimplePrompt() {
         let resEl = document.getElementById('res_div');
         if (typeof resEl != "undefined") {
@@ -23,7 +26,6 @@
           
           xhr.open("POST", "https://immense-sands-12203-f6a7846ce7c0.herokuapp.com/simplePrompt", true);
           xhr.setRequestHeader('Content-Type', 'application/json');
-          xhr.setRequestHeader('Response-Type', 'application/json');
 
           xhr.onreadystatechange = () => {
             if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -46,72 +48,101 @@
           }
         }
       }
+
+      function SimpleImgPrompt() {
+        let imgPrompt = document.getElementById('imgPrompt_div');
+        let inPromptElem = document.getElementById("imgPrompt_in");
+        if (typeof inPromptElem != "undefined" && inPromptElem.value != "") {
+          let imgElem = document.getElementById('imgRes_elem');
+          if (typeof imgElem != "undefined") {
+            imgElem.width = 240;
+            imgElem.height = 326;
+            imgElem.src = "/img/spinning_wheel.png";
+          }
+          if (typeof imgPrompt != "undefined") {
+            imgPrompt.innerText = inPromptElem.value;
+          }
+
+          const xhr = new XMLHttpRequest();
+          xhr.open("POST", "https://immense-sands-12203-f6a7846ce7c0.herokuapp.com/simpleImagePrompt", true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              const status = xhr.status;
+              if (status === 0 || (status >= 200 && status < 400)) {
+                imgElem.width = 1024;
+                imgElem.height = 1024;
+                imgElem.src = 'data:image/png;base64,' + xhr.response.toString();
+              }
+            }
+          }
+
+          xhr.send(JSON.stringify({
+            prompt: inPromptElem.value
+          }));
+        }
+        else{
+          if (typeof imgPrompt != "undefined") {
+            imgPrompt.innerText = "\n\nPlease input a prompt to proceed.\n";
+          }
+        }
+      }
     </script>
   </head>
   <body>
-    <div class = "container">
-      <h1> Simple Prompt </h1>
+    <h1> Simple Prompt </h1>
+    <div>
+      <label for="prompt_in">Input Prompt:</label>
       <div>
-        <label for="prompt_in">Input Prompt:</label>
+        <input type="text" id="prompt_in">
+      </div>
+    </div>
+    <br>
+
+    <button type="button" onclick="SimplePrompt()">Go!</button>
+
+    <div>
+      <br>
+      <label for="prompt_div">Prompt:</label>
+      <div id="prompt_div">
+        Your prompt goes here.
+      </div>
+      <br>
+      <br>
+      <label for="res_div">Response:</label>
+      <div id="res_div">
+        Results go here.
+      </div>
+    </div>
+
+    <hr>
+    <h1> Simple Image Prompt </h1>
+    <div>
+      <div>
+        <label for="imgPrompt_in">Input Prompt:</label>
         <div>
-          <input type="text" id="prompt_in">
+          <input type="text" id="imgPrompt_in">
         </div>
       </div>
       <br>
 
-      <button type="button" onclick="SimplePrompt()">Go!</button>
+      <button type="button" onclick="SimpleImgPrompt()">Go!</button>
 
       <div>
         <br>
-        <label for="prompt_div">Prompt:</label>
-        <div id="prompt_div">
-          Your prompt goes here.
+        <label for="imgPrompt_div">Prompt:</label>
+        <div id="imgPrompt_div">
+          Your image prompt goes here.
         </div>
         <br>
         <br>
-        <label for="res_div">Response:</label>
-        <div id="res_div">
-          Results go here.
+        <label for="imgRes_div">Response:</label>
+        <div id="imgRes_div">
+          <img src="" alt="N/A" width="150" height="150" id="imgRes_elem">
         </div>
       </div>
 
-      <h1> Simple Image Prompt </h1>
-      <div>
-        <div>
-          <label for="imgPrompt_in">Input Prompt:</label>
-          <div>
-            <input type="text" id="imgPrompt_in">
-          </div>
-          <label for="imgDim_in">Input Dimensions:</label>
-          <div>
-            <input type="text" id="imgDimensions_in" value="1024x1024">
-          </div>
-        </div>
-        <br>
-
-        <button type="button" onclick="SimpleImgPrompt()">Go!</button>
-
-        <div>
-          <br>
-          <label for="imgPrompt_div">Prompt:</label>
-          <div id="imgPrompt_div">
-            Your image prompt goes here.
-          </div>
-          <br>
-          <br>
-          <label for="imgRes_div">Response:</label>
-          <div id="imgRes_div">
-            <img src="" alt="N/A" width="150" height="150" id="imgRes_elem">
-          </div>
-        </div>
-
-      </div>
-
-      <footer>
-        <ul>
-          <li><a href = "https://github.com/priimuse">my github account</a></li>
-        </ul>
-      </footer>
     </div>
   </body>
 </html>
