@@ -57,7 +57,7 @@
           if (typeof imgElem != "undefined") {
             imgElem.width = 240;
             imgElem.height = 326;
-            imgElem.src = "/img/spinning_wheel.png";
+            imgElem.src = "/img/spinning_wheel.png"; //https://www.stockvault.net/photo/201882/old-lady-spinning
           }
           if (typeof imgPrompt != "undefined") {
             imgPrompt.innerText = inPromptElem.value;
@@ -95,12 +95,12 @@
     <div>
       <label for="prompt_in">Input Prompt:</label>
       <div>
-        <input type="text" id="prompt_in">
+        <input type="text" id="prompt_in", size=100>
       </div>
     </div>
     <br>
 
-    <button type="button" onclick="SimplePrompt()">Go!</button>
+    <button type="button" onclick="SimplePrompt()">  Submit Prompt  </button>
 
     <div>
       <br>
@@ -122,12 +122,12 @@
       <div>
         <label for="imgPrompt_in">Input Prompt:</label>
         <div>
-          <input type="text" id="imgPrompt_in">
+          <input type="text" id="imgPrompt_in" size=100>
         </div>
       </div>
       <br>
 
-      <button type="button" onclick="SimpleImgPrompt()">Go!</button>
+      <button type="button" onclick="SimpleImgPrompt()">  Submit Image Prompt  </button>
 
       <div>
         <br>
