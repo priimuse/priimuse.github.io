@@ -1,30 +1,117 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Wesley Wilson, Genius</title>
+    <title>Wesley Wilson</title>
     <!-- link to main style sheet -->
     <link rel = "stylesheet" type = "text/css" href = "/css/main.css">
+
+    <script>
+      function SimplePrompt() {
+        let resEl = document.getElementById('res_div');
+        if (typeof resEl != "undefined") {
+          resEl.innerText = "\n\nProcessing Request...\n"
+        }
+
+        let inP = document.getElementById('prompt_in');
+        if (typeof inP != "undefined" && inP.value != "") {
+          let inP_div = document.getElementById('prompt_div');
+          if (typeof inP_div != "undefined") {
+            inP_div.innerText = inP.value;
+          }
+
+          const xhr = new XMLHttpRequest();
+          
+          xhr.open("POST", "https://immense-sands-12203-f6a7846ce7c0.herokuapp.com/simplePrompt", true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.setRequestHeader('Response-Type', 'application/json');
+
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              const status = xhr.status;
+              if (status === 0 || (status >= 200 && status < 400)) {
+                if (typeof resEl != "undefined") {
+                  resEl.innerText = "\n\n" + xhr.response.toString() + "\n";
+                }
+              }
+            }
+          }
+
+          xhr.send(JSON.stringify({
+            prompt: inP.value
+          }));
+        }
+        else {
+          if (typeof resEl != "undefined") {
+            resEl.innerText = "\n\nPlease input a prompt to generate a response.\n";
+          }
+        }
+      }
+    </script>
   </head>
   <body>
-    <nav>
-    <ul>
-      <li><a href = "/">Home</a></li>
-      <li><a href = "/about">About</a></li>
-      <li><a href = "/cv">CV</a></li>
-      <li><a href = "/blog">Blog</a></li>
-    </ul>
-    </nav>
     <div class = "container">
-    <div class = "blurb">
-      <h1>Hi there! I'm Wesley Wilson!</h1>
-      <p>I'm best known as the <em>Genius</em>. <a href = "/about">Read more about my life...</a></p>
-    </div><!-- /.blurb -->
-    </div><!-- /.container -->
-    <footer>
-    <ul>
-      <li><a href = "mailto: wmwilson87@gmail.com">email</a></li>
-      <li><a href = "https://github.com/priimuse">my github account</a></li>
-    </ul>
-    </footer>
+      <h1> Simple Prompt </h1>
+      <div>
+        <label for="prompt_in">Input Prompt:</label>
+        <div>
+          <input type="text" id="prompt_in">
+        </div>
+      </div>
+      <br>
+
+      <button type="button" onclick="SimplePrompt()">Go!</button>
+
+      <div>
+        <br>
+        <label for="prompt_div">Prompt:</label>
+        <div id="prompt_div">
+          Your prompt goes here.
+        </div>
+        <br>
+        <br>
+        <label for="res_div">Response:</label>
+        <div id="res_div">
+          Results go here.
+        </div>
+      </div>
+
+      <h1> Simple Image Prompt </h1>
+      <div>
+        <div>
+          <label for="imgPrompt_in">Input Prompt:</label>
+          <div>
+            <input type="text" id="imgPrompt_in">
+          </div>
+          <label for="imgDim_in">Input Dimensions:</label>
+          <div>
+            <input type="text" id="imgDimensions_in" value="1024x1024">
+          </div>
+        </div>
+        <br>
+
+        <button type="button" onclick="SimpleImgPrompt()">Go!</button>
+
+        <div>
+          <br>
+          <label for="imgPrompt_div">Prompt:</label>
+          <div id="imgPrompt_div">
+            Your image prompt goes here.
+          </div>
+          <br>
+          <br>
+          <label for="imgRes_div">Response:</label>
+          <div id="imgRes_div">
+            <img src="" alt="N/A" width="150" height="150" id="imgRes_elem">
+          </div>
+        </div>
+
+      </div>
+
+      <footer>
+        <ul>
+          <li><a href = "https://github.com/priimuse">my github account</a></li>
+        </ul>
+      </footer>
+    </div>
   </body>
 </html>
